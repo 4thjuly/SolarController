@@ -22,26 +22,21 @@ const RELAY_PIN = B15;
 
 const PAGE_STYLE = 'font-family:Verdana; font-size:20px;';
 const PAGE_HEADER = 
-`
-    <!DOCTYPE html>
+`   <!DOCTYPE html>
     <html style="${PAGE_STYLE}"> 
-    <head> 
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-`;  
+      <head> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body>`;  
 const PAGE_FOOTER = 
- `
-  </body>
-  </html>
-`;
-const INDEX = `
-<html>
-  <head>
-    <meta http-equiv="Refresh" content="0; url=aplist.njs"/>
-  </head>
-</html>
-`;
+`     </body>
+    </html>`;
+const INDEX_PAGE = 
+`   <html>
+      <head>
+        <meta http-equiv="Refresh" content="0; url=aplist.njs"/>
+      </head>
+    </html>`;
 
 var _flashMem = new FlashEEPROM();
 var _webServer;
@@ -168,12 +163,13 @@ function sendDataToSmartthings() {
   }
 }
 
-function apListPageContent() {
-  let page = PAGE_HEADER + 
-    'Device ID: ' + _mac + 
-    '<br><hr><br>' +
-    '<div style="text-align:center">Access Point List</div>' + 
-    '<br>';
+function apListPageContent() { 
+  let page = 
+   ` ${PAGE_HEADER}
+    Device ID: ${_mac} 
+    <br><hr><br>
+    <div style="text-align:center">Access Point List</div>
+    <br>`;
   
   if (_apList) {
     page += '<ul>';
@@ -184,9 +180,7 @@ function apListPageContent() {
     page += '</ul>';
   } 
 
-  page += '<hr>' + 
-    '<a href="/enterSSID.njs">Continue</a>' +
-    PAGE_FOOTER;
+  page += '<hr> <a href="/enterSSID.njs">Continue</a>' + PAGE_FOOTER;
 
   // Async refresh the list
   setTimeout( () => {
@@ -214,18 +208,14 @@ function relayPageContent(req, res, parsedUrl, webserver) {
     }
   }
 
-  let page = PAGE_HEADER + 
-    'Device ID: ' + _mac + 
-    '<br><hr><br>' +
-    '<div style="text-align:center">Relay</div>' + 
-    '<br>';
-  
-  if (_relayOn) {
-    page += 'Relay: On';
-  } else {
-    page += 'Relay: Off';
-  }
+  let page = 
+  `   ${PAGE_HEADER} 
+      Device ID: ${_mac}
+      <br><hr><br>
+      <div style="text-align:center">Relay</div> 
+      <br>`;
 
+  page += _relayOn ? 'Relay: On' : 'Relay: Off';
   page += '<hr>' + PAGE_FOOTER;
 
   return {'content': page};
@@ -236,21 +226,22 @@ function enterSSIDPageContent() {
   _ssid = undefined;
   _pw = undefined;
   _clientIP = undefined;
-  let page = PAGE_HEADER +
-    'Device ID: ' + _mac + 
-    '<br><hr><br>' +
-    '<div style="text-align:center">Set SSID</div>' +
-    '<br>' +
-    '<form action="/ssidConfirm.njs">' +
-      '<label>SSID</label><br><input name="ssid">' +
-      '<br><br>' +
-      '<label>Password</label><br><input name="password">' +
-      '<br><br>' +
-      '<label>Smartthings IP</label><br><input name="smartthingsIP">' +
-      '<br><br><hr>' +
-      '<button>Save</button>' +
-    '</form>' +
-    PAGE_FOOTER;
+  let page = 
+  `   ${PAGE_HEADER}
+      Device ID: ${_mac}  
+      <br><hr><br> 
+      <div style="text-align:center">Set SSID</div> 
+      <br> 
+      <form action="/ssidConfirm.njs"> 
+        <label>SSID</label><br><input name="ssid"> 
+        <br><br> 
+        <label>Password</label ><br><input name="password"> 
+        <br><br> 
+        <label>Smartthings IP</label><br><input name="smartthingsIP"> 
+        <br><br><hr> 
+        <button>Save</button> 
+      </form> 
+      ${PAGE_FOOTER}`;
   
   return {'content': page};
 }
@@ -272,33 +263,16 @@ function ssidConfirmPageContent(req, res, parsedUrl, webserver) {
     }
   }
 
-  let page = PAGE_HEADER +
-    'Device ID: ' + _mac + 
-    '<br><hr><br>' +
-    '<div style="text-align:center">SSID Set</div>' +
-    '<br>';
-  
-  if (_ssid) {
-    page += `<div> SSID: ${_ssid} </div>`;
-  } else {
-    page += `<div> SSID: [Connecting] </div>`;
-  }
+  let page = 
+  `   ${PAGE_HEADER} 
+      Device ID: ${_mac}  
+      <br><hr><br> 
+      <div style="text-align:center">SSID Set</div> 
+      <br>`;
 
-  if (_clientIP) {
-    page += `<div> Client IP: ${_clientIP} </div>`;
-    // setTimeout( () => { 
-    //   console.log('Stopping AP');
-    //   ledStopBlink();
-    //   Wifi.stopAP();
-    // }, 1000);
-  } else {
-    page += `<div> Client IP: [Connecting] </div>`;
-  } 
-  
-  if (_smartthingsIP) {
-    page += `<div> Smartthings IP: ${_smartthingsIP} </div>`;
-  }
-
+  page += _ssid ? `<div> SSID: ${_ssid} </div>` : `<div> SSID: [Connecting] </div>`;
+  page += _clientIP ? `<div> Client IP: ${_clientIP} </div>` : `<div> Client IP: [Connecting] </div>`;
+  page += _smartthingsIP ? `<div> Smartthings IP: ${_smartthingsIP} </div>` : '';
   page += '<br><hr>' + PAGE_FOOTER;
 
   if (_connectError) {
@@ -372,7 +346,7 @@ function onWebServerStart(webserver) {
 function createWebServer() {
   try {
     _webServer = new WebServer({
-      port: 80,
+      port: 80,  
       default_type: 'text/html',
       default_index: 'index',
       memory: {
@@ -381,7 +355,7 @@ function createWebServer() {
         'ssidConfirm.njs': {'content': ssidConfirmPageContent},
         'relay.njs' : {'content': relayPageContent},
         'relay' : {'content': '{ }'},
-        'index': {'content': INDEX},
+        'index': {'content': INDEX_PAGE},
       }
     });
     _webServer.on('start', onWebServerStart);
