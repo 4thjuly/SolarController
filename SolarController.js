@@ -2,8 +2,8 @@
 // Solar Controller
 
 // Wiring
-//   A0 - voltage
-//   A1 - light level
+//   A0  - voltage
+//   A1  - light level
 //   B15 - relay
 
 const Wifi = require('Wifi');
