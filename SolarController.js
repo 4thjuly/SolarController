@@ -1,6 +1,11 @@
 // Copyright (C) 2018 Ian Ellison-Taylor - All Rights Reserved
 // Solar Controller
 
+// Wiring
+//   A0 - voltage
+//   A1 - light level
+//   B15 - relay
+
 const Wifi = require('Wifi');
 const WebServer = require('WebServer'); 
 const http = require("http");
