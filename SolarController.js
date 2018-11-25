@@ -29,11 +29,18 @@ const PAGE_HEADER =
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-`;
+`;  
 const PAGE_FOOTER = 
  `
   </body>
   </html>
+`;
+const INDEX = `
+<html>
+  <head>
+    <meta http-equiv="Refresh" content="0; url=aplist.njs"/>
+  </head>
+</html>
 `;
 
 var _flashMem = new FlashEEPROM();
@@ -374,7 +381,7 @@ function createWebServer() {
         'ssidConfirm.njs': {'content': ssidConfirmPageContent},
         'relay.njs' : {'content': relayPageContent},
         'relay' : {'content': '{ }'},
-        'index': {'content': '<html><head><meta http-equiv="Refresh" content="0; url=aplist.njs"/></head></html>!'},
+        'index': {'content': INDEX},
       }
     });
     _webServer.on('start', onWebServerStart);
