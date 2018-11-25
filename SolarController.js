@@ -49,6 +49,7 @@ var _sendDataIntervalID;
 var _relayOn = false;
 var _ledBlink;
 var _blinkIntervalID;
+var _mac;
 
 // Nothing set manually so used the last save params
 function onSetupTimeout() {
@@ -420,8 +421,8 @@ function onInit() {
   let v0 = _flashMem.read(0);
   let ssid = SSID_DEFAULT;
   if (v0) { 
-    mac = E.toString(v0);
-    ssid = 'iot-' + mac.slice(-4);
+    _mac = E.toString(v0);
+    ssid = 'iot-' + _mac.slice(-4);
   }
   Wifi.disconnect();
   Wifi.stopAP();
